@@ -12,3 +12,6 @@ The controller contains the following features:
  
  
  The group project follows the spceificaions of the Aerospace Engineering MSc course AE4301.
+ 
+ ![image](https://user-images.githubusercontent.com/43482835/105977034-95895400-6099-11eb-9443-a532f0efac3d.png)
+
