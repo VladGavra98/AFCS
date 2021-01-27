@@ -1,0 +1,9 @@
+Trim Values and Cost:
+cost   = 4.7464e-30
+thrust = 2826.8165 lb
+elev   = -4.1891 deg
+ail    = -1.9926e-15 deg
+rud    = 1.2406e-14 deg
+alpha  = 10.4511 deg
+dLEF   = 0 deg
+Vel.   = 300ft/s

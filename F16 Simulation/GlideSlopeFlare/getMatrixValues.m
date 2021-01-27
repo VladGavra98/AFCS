@@ -1,9 +1,12 @@
+clear all
+close all
+clc
+
 % constants
 minEngine = 1000;
 maxEngine = 19000;
 minElevator = -25;
 maxElevator = 25;
-
 
 % trim values
 trCost   = 4.7464e-30;
