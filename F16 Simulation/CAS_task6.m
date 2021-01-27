@@ -99,7 +99,6 @@ sys_sp  = ss(A_sp,B_sp,C_sp,D_sp);
 sys_sp.InputName   = {'delta_e'};
 sys_sp.OutputName  = {'alpha','q'};
 sys_sp.StateName   = {'alpha','q'};
- 
 
 H_q_de_op       = minreal(tf(sys_sp('q')));
 H_alpha_de_op   = minreal(tf(sys_sp('alpha')));
@@ -109,6 +108,7 @@ wn_sp_init    = wn_sp(1);
 zeta_sp_init  = zeta_sp( 1);
 aux = cell2mat(H_q_de_op.num);
 T_theta2 = aux(2)/aux(3);
+T_theta2_init = T_theta2;
 
 
 
@@ -146,7 +146,7 @@ H_alpha_de_cl  = minreal(tf(sys_sp_cl('alpha')));
 wn_sp    = wn_sp(1);
 zeta_sp  = zeta_sp(1);
 
-%% Wash-out filter:
+%% Lead-lag filter:
 
 tau_d  = T_theta2_r;
 tau_i  = T_theta2;
@@ -162,12 +162,13 @@ T_theta2 = aux(2)/aux(3);
 gust = 4.572;
 disturbance = abs(gust / V);   % bad gust 
 
-dist_alpha = K_alpha * atan(disturbance) * 180/pi;
-% dist_q     = K_q * atan(disturbance)
+dist_alpha = K_alpha * atan(disturbance);
+dist_q     = K_q * atan(disturbance);
 
 
 
 %% Control Anticipation Parameter:
+CAP_init = wn_sp_init^2/((V/g)*(1/T_theta2)); %initial value of the CAP, before stability augmentation
 
 CAP = wn_sp^2/((V/g)*(1/T_theta2));
 
@@ -191,14 +192,16 @@ grid on;
 r_1=rectangle('Position',Flight_phase_A_level_3,'FaceColor',[39/255, 64/255, 139/255, 0.5]); hold on;
 r_2=rectangle('Position',Flight_phase_A_level_2,'FaceColor',[79/255, 148/255, 205/255, 0.6]); hold on;
 r_3=rectangle('Position',Flight_phase_A_level_1,'FaceColor',[0, 1, 1, 0.5]); hold on;
-scatter(zeta_sp,CAP,'r', "filled")
+scatter(zeta_sp,CAP, 'MarkerEdgeColor',[0 .3 .3],...
+              'MarkerFaceColor',[0 204/255 0])
+scatter(zeta_sp_init,CAP_init,'r', "filled")
 set(gca, 'XScale','log')
 set(gca, 'YScale','log')
 xlim([0.1 10])
 ylim([0.01 10])
-ylabel('CAP [1/(g sec^{2})]');
-xlabel('short period damping ratio\zeta_{sp} [-]');
-title('Flight Phase Category A')
+ylabel('CAP [1/(g \cdot s^{2})]', 'FontSize',13);
+xlabel('\zeta_{sp} [-]', 'FontSize',13);
+title('Flight Phase Category A', 'FontSize',14)
 
 %% Flight Phase B
 Flight_phase_B_level_1 = [0.3,0.085,2-0.3,3.6-0.085]; %x,y,width, height
@@ -210,14 +213,16 @@ grid on;
 r_1=rectangle('Position',Flight_phase_B_level_3,'FaceColor',[39/255, 64/255, 139/255, 0.5]); hold on;
 r_2=rectangle('Position',Flight_phase_B_level_2,'FaceColor',[79/255, 148/255, 205/255, 0.6]); hold on;
 r_3=rectangle('Position',Flight_phase_B_level_1,'FaceColor',[0, 1, 1, 0.5]); hold on;
-scatter(zeta_sp,CAP,'r', "filled")
+scatter(zeta_sp,CAP, 'MarkerEdgeColor',[0 .3 .3],...
+              'MarkerFaceColor',[0 204/255 0])
+scatter(zeta_sp_init,CAP_init,'r', "filled")
 set(gca, 'XScale','log')
 set(gca, 'YScale','log')
 xlim([0.1 10])
 ylim([0.01 10])
-ylabel('CAP [1/(g sec^{2})]');
-xlabel('short period damping ratio\zeta_{sp} [-]');
-title('Flight Phase Category B')
+ylabel('CAP [1/(g \cdot s^{2})]', 'FontSize',13);
+xlabel('\zeta_{sp} [-]', 'FontSize',13);
+title('Flight Phase Category B', 'FontSize',14)
     
 %% Flight Phase C
 
@@ -232,14 +237,16 @@ grid on;
 r_1=rectangle('Position',Flight_phase_C_level_3,'FaceColor',[39/255, 64/255, 139/255, 0.5]); hold on;
 r_2=rectangle('Position',Flight_phase_C_level_2,'FaceColor',[79/255, 148/255, 205/255, 0.6]); hold on;
 r_3=rectangle('Position',Flight_phase_C_level_1,'FaceColor',[0, 1, 1, 0.5]); hold on;
-scatter(zeta_sp,CAP,'r', "filled")
+scatter(zeta_sp,CAP, 'MarkerEdgeColor',[0 .3 .3],...
+              'MarkerFaceColor',[0 204/255 0])
+scatter(zeta_sp_init,CAP_init,'r', "filled")
 set(gca, 'XScale','log')
 set(gca, 'YScale','log')
 xlim([0.1 10])
 ylim([0.01 10])
-ylabel('CAP [1/(g sec^{2})]');
-xlabel('short period damping ratio\zeta_{sp} [-]');
-title('Flight Phase Category C')
+ylabel('CAP [1/(g \cdot s^{2})]', 'FontSize',13);
+xlabel('\zeta_{sp} [-]', 'FontSize',13);
+title('Flight Phase Category C', 'FontSize',14)
 
 %% Comparing the short period pitch rate time response of the 4 state mdel and the 2 state model
 dt=0.001;
@@ -268,10 +275,12 @@ figure(2)
 figure(3)
 t = 0:0.01:20;
 u = heaviside(t)-heaviside(t-10);
-[y_values, x_values]  = lsim(-1*H_q_de,u,t); 
+[y_values_init, x_values_init]  = lsim(-1*H_q_de_cl,u,t);
+[y_values, x_values]  = lsim(-1*H_q_de,u,t);
 plot(t,u, "LineWidth", 1.5);
 hold on;
 grid on;
+plot(x_values_init,y_values_init, "LineWidth", 1.5);
 plot(x_values,y_values, "LineWidth", 1.5);
 legend("Input", "Pitch rate time response")
 axis([0 20 -0.4 1]);
@@ -284,9 +293,11 @@ ylabel("Pitch Rate - q [ \circ/s]");
 figure(4)
 t = 0:0.01:20;
 u = heaviside(t)-heaviside(t-10);
+[y_values_a_init, x_values_a_init] = lsim(-1*H_q_de_cl*(1/s),u,t);
 [y_values_a, x_values_a] = lsim(-1*H_q_de*(1/s),u,t);
 hold on;
 grid on;
+plot(x_values_a_init, y_values_a_init);
 plot(x_values_a, y_values_a);
 plot([0,10,20],[0,y_values_a(2000),y_values_a(2000)])
 title("Pitch Angle - \theta [\circ]");
@@ -295,13 +306,18 @@ ylabel("Pitch Angle - \theta [\circ]");
 
 
 %% Dropback Criterion
+DB_q_ss_init = T_theta2_init - (2*zeta_sp_init)/(wn_sp_init);
 DB_q_ss = T_theta2 - (2*zeta_sp)/(wn_sp);
 
+q_m_init = max(y_values_init); %maximum pitch rate
 q_m = max(y_values); %maximum pitch rate
+
 
 index = find(x_values==9.99);
 q_s = y_values(index); %steady state value of pitch rate
 
+
+q_m_q_s_ratio_init = q_m_init/ q_s;
 q_m_q_s_ratio = q_m/ q_s;
 
 %% Criterion for the tracking task (DB graph) Fig 6.3
@@ -317,8 +333,18 @@ ylim([1, 4]);
 patch(coords(:,1), coords(:,2),'c', 'FaceAlpha',0.6);
 hold on;
 grid on;
-scatter(DB_q_ss,q_m_q_s_ratio,"filled",'r');
+scatter(DB_q_ss_init,q_m_q_s_ratio_init,"filled",'r');
+scatter(DB_q_ss,q_m_q_s_ratio,'MarkerEdgeColor',[0 .3 .3],...
+              'MarkerFaceColor',[0 204/255 0]');
 hold on;
+txt = ['Satisfactory'];
+text(0.03,1.2,txt)
+txt = ['Sluggish'];
+text(-0.25,2.5,txt)
+txt = ['Continuous bobbling'];
+text(0.3,3.5,txt)
+txt = ['Abrupt bobble tendency'];
+text(0.3,2.25,txt)
 xline(0, "k");
 title("Criterion for the tracking task");
 xlabel('DB/q_s [s]')
