@@ -277,13 +277,13 @@ t = 0:0.01:20;
 u = heaviside(t)-heaviside(t-10);
 [y_values_init, x_values_init]  = lsim(-1*H_q_de_cl,u,t);
 [y_values, x_values]  = lsim(-1*H_q_de,u,t);
-plot(t,u, "LineWidth", 1.5);
+plot(t,u, "k-", "LineWidth", 1);
 hold on;
 grid on;
-plot(x_values_init,y_values_init, "LineWidth", 1.5);
-plot(x_values,y_values, "LineWidth", 1.5);
-legend("Input", "Pitch rate time response")
-axis([0 20 -0.4 1]);
+plot(x_values_init,y_values_init,"r-", "LineWidth", 1.5);
+plot(x_values,y_values, "b-", "LineWidth", 1.5);
+legend("Input", "Initial pitch rate time response", "Current pitch rate time response")
+axis([0 20 -1.5 2]);
 title("Pitch Rate - q [ \circ/s]");
 xlabel("Time [s]")
 ylabel("Pitch Rate - q [ \circ/s]");
@@ -297,9 +297,10 @@ u = heaviside(t)-heaviside(t-10);
 [y_values_a, x_values_a] = lsim(-1*H_q_de*(1/s),u,t);
 hold on;
 grid on;
-plot(x_values_a_init, y_values_a_init);
-plot(x_values_a, y_values_a);
-plot([0,10,20],[0,y_values_a(2000),y_values_a(2000)])
+plot(x_values_a_init, y_values_a_init, "r-", "LineWidth", 1.5);
+plot(x_values_a, y_values_a, "b-", "LineWidth", 1.5);
+plot([0,10,20],[0,y_values_a(2000),y_values_a(2000)],  "k-", "LineWidth", 1)
+legend("Initial pitch angle time response", "Current pitch angle time response", "Steady state pitch attitude")
 title("Pitch Angle - \theta [\circ]");
 xlabel("Time [s]")
 ylabel("Pitch Angle - \theta [\circ]");
