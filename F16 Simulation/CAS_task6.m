@@ -15,6 +15,14 @@ A_long_initial= [0.000e+00    9.000e+02    0.000e+00   -9.000e+02    0.000e+00  
                 1.118e-06   -1.748e-13   -7.940e-05   -1.349e+00    9.322e-01   -3.239e-09   -2.833e-03; 
                 2.235e-20    0.000e+00   -1.586e-18   -5.916e+00   -1.819e+00    0.000e+00   -4.351e-01; 
                 0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00   -1.000e+00    0.000e+00; 
+                %%
+                % 
+                %  
+                %%
+                % 
+                
+                % 
+                % 
                 0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00   -2.020e+01];
       
  
@@ -110,7 +118,33 @@ zeta_sp_init  = zeta_sp( 1);
 aux = cell2mat(H_q_de_op.num);
 T_theta2 = aux(2)/aux(3);
 
+%%       Phugoid:
 
+A_sp  = [A_long_a_c(3:end,3) , A_long_a_c(3:end,4)];
+B_sp  = [B_long_a_c(3:end)];
+C_sp  = [C_long_a_c(3:end,3) , C_long_a_c(3:end,4)];
+D_sp  = [0;0];
+
+
+sys_sp  = ss(A_sp,B_sp,C_sp,D_sp);
+
+sys_sp.InputName   = {'delta_e'};
+sys_sp.OutputName  = {'alpha','q'};
+sys_sp.StateName   = {'alpha','q'};
+ 
+
+H_q_de_op       = minreal(tf(sys_sp('q')));
+H_alpha_de_op   = minreal(tf(sys_sp('alpha')));
+
+% poles:
+
+[wn_sp,zeta_sp] = damp(sys_sp);
+wn_sp_init    = wn_sp(1);
+zeta_sp_init  = zeta_sp( 1);
+
+% zeros:
+aux           = cell2mat(H_q_de_op.num);
+T_theta2      = aux(2)/aux(3);
 
 %% Requirements:
 wn_sp_r    = 0.03 * V;
@@ -121,9 +155,9 @@ zeta_sp_r  = 0.5;
 poles_r = [complex(-zeta_sp_r * wn_sp_r ,- wn_sp_r * sqrt(1- zeta_sp_r^2))    complex(-zeta_sp_r * wn_sp_r ,+ wn_sp_r * sqrt(1- zeta_sp_r^2))];
 
 %% Calculate gains:
+
 K = place(A_sp,B_sp, poles_r);
   
-
 K_alpha = K(1);
 K_q     = K(2);
 
@@ -146,14 +180,14 @@ H_alpha_de_cl  = minreal(tf(sys_sp_cl('alpha')));
 wn_sp    = wn_sp(1);
 zeta_sp  = zeta_sp(1);
 
-%% Wash-out filter:
+%% Lead-lag filter:
 
 tau_d  = T_theta2_r;
 tau_i  = T_theta2;
-H_ll = (tau_d*s +1)/(1+tau_i*s);
+H_ll   = (tau_d*s +1)/(1+tau_i*s);
 
-H_q_de = minreal(H_ll * H_q_de_cl);
-aux = cell2mat(H_q_de.num);
+H_q_de   = minreal(H_ll * H_q_de_cl);
+aux      = cell2mat(H_q_de.num);
 T_theta2 = aux(2)/aux(3);
 
 
@@ -162,8 +196,7 @@ T_theta2 = aux(2)/aux(3);
 gust = 4.572;
 disturbance = abs(gust / V);   % bad gust 
 
-dist_alpha = K_alpha * atan(disturbance) * 180/pi;
-% dist_q     = K_q * atan(disturbance)
+dist_alpha = K_alpha * atan(disturbance) + K_q * 0;
 
 
 
@@ -197,7 +230,7 @@ set(gca, 'YScale','log')
 xlim([0.1 10])
 ylim([0.01 10])
 ylabel('CAP [1/(g sec^{2})]');
-xlabel('short period damping ratio\zeta_{sp} [-]');
+xlabel('short period damping ratio \zeta_{sp} [-]');
 title('Flight Phase Category A')
 
 %% Flight Phase B
