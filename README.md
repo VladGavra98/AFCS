@@ -17,9 +17,9 @@ The controller contains the following features:
  ![image](https://user-images.githubusercontent.com/43482835/105977034-95895400-6099-11eb-9443-a532f0efac3d.png)
 
 
-## Files
+# Files
 
-# Chapter 7
+## Chapter 7
 The files used for chapter 7, where the glideslope and flare controller are designed can be found in the F16 Simulation/GlideSlopeFlare folder. The simulink model is in the 'glideslope.slx' file. 
 
 The state-space matrix coefficient A, B, C, D need to be generated before running the simulation, by running 'getMatrixValues.m'. Here, the longitudinal model is loaded from the 
