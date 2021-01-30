@@ -19,7 +19,7 @@ The controller contains the following features:
 
 # Files (corresponding to the chapters in the assignment manual)
 ## Chapter 4
-The script used for plotting Figure 2 and Figure 3 of the report may be found in the FindF16dynamics.m file.
+The script used for analysing the influence of the accelermoeter position may be found in the FindF16Dynamics.m file.
 
 ## Chapter 5 
 The script used for the longitundinal open loop analysis may be found in the Task_5.m file, while the one created for lateral open loop analysis may be found in the Task_5_lat.m file.
