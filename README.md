@@ -17,7 +17,15 @@ The controller contains the following features:
  ![image](https://user-images.githubusercontent.com/43482835/105977034-95895400-6099-11eb-9443-a532f0efac3d.png)
 
 
-# Files
+# Files (corresponding to the chapters in the assignment manual)
+## Chapter 4
+The script used for plotting Figure 2 and Figure 3 of the report may be found in the FindF16dynamics.m file.
+
+## Chapter 5 
+The script used for the longitundinal open loop analysis may be found in the Task_5.m file, while the one created for lateral open loop analysis may be found in the Task_5_lat.m file.
+
+## Chapter 6
+The code developed for the pitch rate command design tasks may be found in the CAS_task6.m file.
 
 ## Chapter 7
 The files used for chapter 7, where the glideslope and flare controller are designed can be found in the F16 Simulation/GlideSlopeFlare folder. The simulink model is in the 'glideslope.slx' file. 
