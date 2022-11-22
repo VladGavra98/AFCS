@@ -15,24 +15,3 @@ The controller contains the following features:
  The group project follows the guidelines of the AE4301 course, as part of the Aerospace Engineering Master.
  
  ![image](https://user-images.githubusercontent.com/43482835/105977034-95895400-6099-11eb-9443-a532f0efac3d.png)
-
-
-# Files (corresponding to the chapters in the assignment manual)
-## Chapter 4
-The script used for analysing the influence of the accelerometer position may be found in the FindF16Dynamics.m file.
-
-## Chapter 5 
-The script used for the longitudinal open loop analysis may be found in the Task_5.m file, while the one created for lateral open loop analysis may be found in the Task_5_lat.m file.
-
-## Chapter 6
-The code developed for the pitch rate command design tasks may be found in the CAS_task6.m file.
-
-## Chapter 7
-The files used for chapter 7, where the glideslope and flare controller are designed can be found in the F16 Simulation/GlideSlopeFlare folder. The Simulink model is in the 'glideslope.slx' file. 
-
-The state-space matrix coefficients A, B, C, and D need to be generated before running the simulation, by running 'getMatrixValues.m'. Here, the longitudinal model is loaded from the 
-'f16long5000ft300fts.mat', which contains the longitudinal F16 model linearised and trimmed at an altitude of 5000 ft and an airspeed of 300 ft/s.
-
-'pitchTuner.m' and 'speedTuner.m' are helper files which were used to attempt to tune the controllers, but they are not needed to run the simulation.
-
-Finally, 'trimValues.txt' contains the trim values obtained, but this file is not used for the simulation.
